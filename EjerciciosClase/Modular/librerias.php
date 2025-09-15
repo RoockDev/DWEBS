@@ -3,6 +3,7 @@
 #Ejercicio 5 determina modularmente si un año es bisiesto o no
 
 function esBisiesto($agno){
+    
     $bisiesto = false;
     if($agno % 4 == 0 || ($agno % 100 == 0 && $agno % 400 == 0)){
         $bisiesto = true;
@@ -168,4 +169,8 @@ function arrayCapicua($array){
     return $array === $array2;
 }
 
+
+
+
 ?>
+

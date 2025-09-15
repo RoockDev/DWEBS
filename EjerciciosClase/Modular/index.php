@@ -4,14 +4,30 @@ require ('./librerias.php');
 
 #Ejercicio 5 determina modularmente si un año es bisiesto o no
 
-$agno = 2023;
-$bisiesto = esBisiesto($agno);
+$parametros = explode("/",$_SERVER["REQUEST_URI"]);
+unset($parametros[0]);
 
-if($bisiesto){
-    echo 'el año '.$agno. ' es bisiesto<br>';
-}else{
-    echo "el año $agno no es bisiesto<br>";
+if($_SERVER["REQUEST_METHOD"] === "GET"){
+    if($parametros[1] == "bisiesto" && count($parametros) == 2){
+        $numero = intval($parametros[2]);
+        
+        $bisiesto = esBisiesto($numero);
+        if($bisiesto){
+            echo 'el año  es bisiesto<br>';
+        }else{
+            echo "el año  no es bisiesto<br>";
+        }
+    }
+
 }
+/**
+    * if($bisiesto){
+    *   echo 'el año '.$agno. ' es bisiesto<br>';
+    *  }else{
+    * echo "el año $agno no es bisiesto<br>";
+    *}
+ */
+
 
 #Ejercicio 11 Calcula modularmente el factorial de un numero
 
@@ -115,7 +131,6 @@ Ej 9 Arrays haz un programa que diga si un numero es capicua por ejemplo 30303
  */
 
 $num = 30303;
-
 if(esCapicua($num)){
     echo "el numero $num es capicua<br>";
 }else{
@@ -125,12 +140,17 @@ if(esCapicua($num)){
 #Ejemplo con Array
 
 $array1 = [3,0,3,0,4];
-
 if(arrayCapicua($array1)){
     echo 'es capicua';
 }else{
     echo 'no es capicua';
 }
+
+#La mosca
+
+
+
+
 
 
 
