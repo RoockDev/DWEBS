@@ -3,7 +3,7 @@
 echo $_SERVER["REQUEST_URI"].'<br>';
 echo $_SERVER["REQUEST_METHOD"].'<br>';
 
-$ser
+
 
 $parametros = explode("/",$_SERVER["REQUEST_URI"]);
 unset($parametros[0]);
@@ -21,9 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         inicializarTablero($tablero,20);
         colocarMinas($tablero);
         echo(toString($tablero));
-        echo(toString(tirada($tablero,$parametros[2])));
-        echo(toString(minasAdyacentesDerecha($tablero,$parametros[2])));
-        echo(toString(minasAdyacentesIzquierda($tablero,$parametros[2])));
+        echo(tirada($tablero,$parametros[2]));
+        echo(minasAdyacentesDerecha($tablero,$parametros[2]));
+        echo(minasAdyacentesIzquierda($tablero,$parametros[2]));
     }
 }
 
@@ -51,8 +51,8 @@ function colocarMinas(&$tablero){
 }
 
 function toString($tablero){
-    $cadena = "";
-    for ($i=0; $i < count($tablero) ; $i++) { 
+    $cadena = '';
+    for ($i=0; $i < count($tablero)  ; $i++) { 
         $cadena = $cadena.' '.$tablero[$i].' ';
     }
     return $cadena;
