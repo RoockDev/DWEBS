@@ -1,11 +1,11 @@
 <?php
 
 class Tablero{
-    private $casillas;
+    private $casillas=[];
 
     public function __construct($cantidadCasillas){
         for ($i=0; $i < $cantidadCasillas ; $i++) { 
-            $this->casillas[] = rand(0,2);
+            $this->casillas[] = 0;
         }
     }
 
@@ -22,12 +22,12 @@ class Tablero{
 
     /**
      * 1- Mina Adyacente
-     * 2-Mina explotada
+     * 2- Mina explotada
      */
-    public function minasAdyacentes($posicion){
+    public function minasAdyacentes($posicion){//No cumple con pru, hace dos cosas no una
         $accion = 0;
         if ($this->casillas[$posicion] == '*') {
-            $this->casillas[$posicion] == '_';
+            $this->casillas[$posicion] == '_'; 
             $accion = 2;
         }else{
             if ($posicion > 0) {
