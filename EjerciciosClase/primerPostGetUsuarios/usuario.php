@@ -16,6 +16,8 @@ class Usuario {
 
     }
 
+    private static $usuarios = [];
+
     // metodo para instanciar solo una clase y que sea singleton
     public static function getInstancia(){
         if (self::$instancia == null) {
@@ -37,6 +39,13 @@ class Usuario {
 
         return $allUsers;
     }
+
+    public function agregarUsuario($datosUsuario){
+        // uso self como si fuese el companion object en kotlin
+        self::$usuarios[] = $datosUsuario;
+    }
+
+    
 
     public function getUsuario($indice){
         $usuario = [$this->nombres[$indice],$this->edades[$indice],$this->passwords[$indice]];
