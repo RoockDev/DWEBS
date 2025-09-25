@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                 try {
                     $usuario = $usuarioDAO->getUserByDni($dni);
                     $datos = [
-                        "dni" => $usuario->getDni(),
+                        "dni" => $usuario->getDni(),  
                         "nombre" => $usuario->getNombre(),
                         "clave" => $usuario->getClave(),
                         "tfno" => $usuario->getTfno()
@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             break;
         
         
-        case 'getAllUsers':
+        case 'getAllUsers':  //preguntar en clase si esto va por buen camino
             try {
                 $usuarios = $usuarioDAO->getAllUsers();
                 header("HTTP/1.1 200 ok");
