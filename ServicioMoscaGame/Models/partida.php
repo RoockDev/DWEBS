@@ -7,13 +7,28 @@ class Partida{
     private $estado;
     private $intentosTotales;
 
-    public function __construct($idUsuario,$tablero,$estado)
+    //de esta forma podemos tratar el tablero como string
+    public function __construct($idUsuario,$tablero = null,$estado)
     {
         $this->idUsuario = $idUsuario;
-        $this->tablero = $tablero;
         $this->estado = $estado;
-
         $this->intentosTotales = 0;
+
+        if ($tablero === null) {
+            $this->tablero = array_fill(0,10,'_');
+        }elseif (is_string($tablero)) {
+            //si el tablero viene como un string de la base de datos lo convertimos en array
+            $this->tablero = str_split($tablero);
+            
+        }else{
+            //si es array se usa directamente
+            $this->tablero = $tablero;
+        }
+    }
+
+    // convertimos el tablero de array a string si lo queremos guardar en bd
+    public function getTableroAsString(){
+        return implode('',$this->tablero); //implode une los elementos de un array en una cadena de texto por el delimitador que tu le pongas
     }
 
     public function inicializarTablero(){
@@ -115,8 +130,12 @@ class Partida{
     /**
      * Set the value of tablero
      */
-    public function setTablero($tablero): self {
-        $this->tablero = $tablero;
+    public function setTablero($tablero): self { 
+        if (is_string($tablero)) {
+            $this->tablero = str_split($tablero);
+        }else{
+            $this->tablero = $tablero;
+        }
         return $this;
     }
 

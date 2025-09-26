@@ -9,7 +9,7 @@ class PartidaDAO{
         try {
           $conexion = Database::connect();
           $partidas = [];
-          $query = "SELECT * FROM partidas";
+          $query = "SELECT * FROM partida";
           $stmt = mysqli_prepare($conexion,$query);
           mysqli_stmt_execute($stmt);
           $resultado = mysqli_stmt_get_result($stmt);
@@ -39,14 +39,21 @@ class PartidaDAO{
     public static function insertPartida($partida){
         try {
             $conexion = Database::connect();
-            $query = "INSERT INTO partida (id,idUsuario,tablero,estado) VALUES(?,?,?,?)";
+            $query = "INSERT INTO partida (idUsuario,tablero,estado,intentosTotales) VALUES(?,?,?,?)";
             $stmt = mysqli_prepare($conexion,$query);
-            $val1 =$partida->getId();
-            $val2 = $partida->getIdUsuario();
-            $val3 = $partida->getTablero();
-            $val4 = $partida->getEstado();
-             mysqli_stmt_bind_param($stmt, 'iiss', $val1, $val2, $val3, $val4);
+            $val1 =$partida->getIdUsuario();
+            $val2 = $partida->getTableroAsString(); //aqui lo convertimos a string
+            $val3 = $partida->getestado();
+            $val4 = $partida->intentosTotales();
+             mysqli_stmt_bind_param($stmt, 'isii', $val1, $val2, $val3, $val4);
             mysqli_stmt_execute($stmt);
+
+            /**
+             * como el id es incremental en la base de datos
+             * aqui lo obtenemos y lo asignamos a la partida
+             */
+
+            $partida ->setId(mysqli_insert_id($conexion));
 
         } catch (Exception $e) {
             throw new Exception("Error al insertar una partida".$e->getMessage());
@@ -67,12 +74,16 @@ class PartidaDAO{
             $resultado = mysqli_stmt_get_result($stmt);
 
             if ($fila = mysqli_fetch_assoc($resultado)) {
+                //pasamos el string del tablero al constructor
                 $partida = new Partida(
                     $fila['id'],
                     $fila['idUsuario'],
-                    $fila['tablero'],
-                    $fila['estado']
+                    $fila['tablero'], //esto es un string el constructor lo convierte a array
+                    $fila['estado'],
+                    $fila['intentosTotales']
                 );
+
+                
             }
 
             return $partida;

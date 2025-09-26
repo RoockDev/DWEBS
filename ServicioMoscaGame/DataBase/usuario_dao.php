@@ -24,10 +24,10 @@ class UsuarioDAO {
     }
 
 
-    public static function getBydni($dni){
+    public static function getById($id){
         $conexion = Database::connect();
-        $stmt = $conexion->prepare("SELECT * FROM usuarios WHERE dni = ? ");
-        $stmt->bind_param('s',$dni);
+        $stmt = $conexion->prepare("SELECT * FROM usuarios WHERE id = ? ");
+        $stmt->bind_param('i',$id);
         $stmt->execute();
         $resultado = $stmt->get_result();
 
@@ -82,10 +82,10 @@ class UsuarioDAO {
         return $ok;
     }
 
-    public static function delete($dni){
+    public static function delete($id){
         $conexion = Database::connect();
-        $stmt = $conexion->prepare("DELETE FROM usuarios WHERE dni = ? ");
-        $stmt->bind_param('s',$dni);
+        $stmt = $conexion->prepare("DELETE FROM usuarios WHERE id = ? ");
+        $stmt->bind_param('i',$id);
         $ok = $stmt->execute();
 
         $stmt->close();
@@ -95,9 +95,9 @@ class UsuarioDAO {
 
     //verificamos clave aqui? para el login? o esto iria en el controlador
 
-    public static function verificarUsuarioLogin($dni,$clave){ //esto esta bien asi?
+    public static function verificarUsuarioLogin($id,$clave){ //esto esta bien asi?
         try {
-            $usuario = self::getBydni($dni);
+            $usuario = self::getById($id);
             if ($usuario && $usuario->verificarClave($clave)) {
                 return $usuario;
             }
