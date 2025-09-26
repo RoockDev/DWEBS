@@ -14,32 +14,7 @@ class UsuarioDAO
         $this->conexion = Conexion::getInstancia();
     }
 
-    public function getUserByDni($dni)
-    {
-        try {
-            $conexionMySql = $this->conexion->getConexion(); //preguntar mañana en clase
-            $query = Consultas::GETBYDNI;
-            $stmt = mysqli_prepare($conexionMySql, $query);
-            mysqli_stmt_bind_param($stmt, "s", $dni);
-            mysqli_stmt_execute($stmt);
-            $resultado = mysqli_stmt_get_result($stmt);
-
-            if ($fila = mysqli_fetch_assoc($resultado)) {
-                $usuario = new Usuario(
-                    $fila['dni'],
-                    $fila['nombre'],
-                    $fila['clave'],
-                    $fila['tfno']
-                );
-            }
-
-            return $usuario;
-        } catch (Exception $e) {
-            throw new Exception("Error: " . $e->getMessage());
-        } finally {
-            $this->conexion->closeConexion();
-        }
-    }
+    
 
     public function getAllUsers()
     {
