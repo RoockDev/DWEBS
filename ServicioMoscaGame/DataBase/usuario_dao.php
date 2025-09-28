@@ -33,7 +33,7 @@ class UsuarioDAO {
 
         $usuario = null;
         if ($fila = $resultado->fetch_assoc() ) {
-            $usuario = new Usuario($fila['dni'],$fila['nombre'],'',$fila['tfno'],$fila['es_admin']);
+            $usuario = new Usuario($fila['dni'],$fila['nombre'],'',$fila['email'],$fila['tfno'],$fila['es_admin']);
 
             $usuario->setId($fila['id']);
             $usuario->setPartidasJugadas($fila['partidas_jugadas']);
@@ -49,14 +49,15 @@ class UsuarioDAO {
 
     public static function insert($usuario){
         $conexion = Database::connect();
-        $stmt = $conexion->prepare("INSERT INTO usuarios (dni,nombre,clave,tfno,es_admin) VALUES ( ?,?,?,?,?)");
+        $stmt = $conexion->prepare("INSERT INTO usuarios (dni,nombre,email,clave,tfno,es_admin) VALUES ( ?,?,?,?,?,?)");
         $dni = $usuario->getBydni();
         $nombre = $usuario->getNombre();
+        $email = $usuario->getEmail();
         $clave = $usuario->getClave();
         $tfno = $usuario->getTfno();
         $es_admin = $usuario->getEsAdmin();
         
-        $stmt->bind_param('ssssi', $dni,$nombre,$clave,$tfno,$es_admin);
+        $stmt->bind_param('ssssii', $dni, $nombre, $email, $clave, $tfno, $es_admin);
         $ok = $stmt->execute();
 
         $stmt->close();
@@ -67,13 +68,14 @@ class UsuarioDAO {
 
     public static function update($usuario){
         $conexion = Database::connect();
-        $stmt = $conexion->prepare("UPDATE usuario SET nombre = ?, clave = ?, tfno = ? WHERE dni = ? ");
-        $dni = $usuario->getDni();
+        $stmt = $conexion->prepare("UPDATE usuarios SET nombre = ?, email = ?, clave = ?, tfno = ? WHERE id = ?");
+        $id = $usuario->getId();
         $nombre = $usuario->getNombre();
+        $email = $usuario->getEmail();
         $clave = $usuario->getClave();
         $tfno = $usuario->getTfno();
 
-        $stmt->bind_param('ssss', $nombre,$clave,$tfno,$dni);
+        $stmt->bind_param('ssssi', $nombre, $email, $clave, $tfno, $id);
         $ok = $stmt->execute();
 
         $stmt->close();

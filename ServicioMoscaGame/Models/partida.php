@@ -8,7 +8,7 @@ class Partida{
     private $intentosTotales;
 
     //de esta forma podemos tratar el tablero como string
-    public function __construct($idUsuario,$tablero = null,$estado)
+    public function __construct($idUsuario,$tablero = null,$estado = null)
     {
         $this->idUsuario = $idUsuario;
         $this->estado = $estado;

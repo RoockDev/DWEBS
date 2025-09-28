@@ -74,23 +74,23 @@ class ControllerUsuarios
         }
     }
 
-// POST /admin -> crear nuevo usuario
-public function createUser(){
-    try {
-        $datos = json_decode(file_get_contents('php//input'),true) ;
+    // POST /admin -> crear nuevo usuario
+    public function createUser(){
+        try {
+            $datos = json_decode(file_get_contents('php//input'),true) ;
 
-        if (!isset($datos['dni']) || !isset($datos['nombre']) || !isset($datos['clave'])) {
-            header('HTTP/1.1 400');
-            echo json_encode(['Error' => 'Faltan campos obligatorios: dni,nombre,clave']);
-        }else{
-            $nuevoUsuario = new Usuario(
-                $datos['dni'],
-                $datos['nombre'],
-                $datos['clave'],
-                $datos['tfno'] ?? null, // si no se introduce nada es null
-                $datos['es_admin'] ?? 0, // si no se introduce nada es false
-            );
-        }
+            if (!isset($datos['dni']) || !isset($datos['nombre']) || !isset($datos['clave'])) {
+                header('HTTP/1.1 400');
+                echo json_encode(['Error' => 'Faltan campos obligatorios: dni,nombre,clave']);
+            }else{
+                $nuevoUsuario = new Usuario(
+                    $datos['dni'],
+                    $datos['nombre'],
+                    $datos['clave'],
+                    $datos['tfno'] ?? null, // si no se introduce nada es null
+                    $datos['es_admin'] ?? 0, // si no se introduce nada es false
+                );
+            }
 
         $exito = UsuarioDAO::insert($nuevoUsuario);
 
@@ -127,12 +127,59 @@ public function updateUser($id){
             echo json_encode(['error' => 'Usuario no encontrado']);
         }else{
             if (isset($datos['nombre'])) {
-                # code...
+                $usuario->setNombre($datos['nombre']);
+            }
+            if (isset($datos['clave'])) {
+                $usuario->setClave($datos['clave']); //cifrada con md5
+            }
+
+            if (isset($datos['tfno'])) {
+                $usuario->setTfno($datos['tfno']);
+            }
+
+            if (isset($datos['es_admin'])) {
+                $usuario->setEsAdmin($datos['es_admin']);
+            }
+
+            $exito = UsuarioDAO::update($usuario);
+            if ($exito) {
+                header('HTTP/1.1 200 ');
+                echo json_encode(['mensaje' => 'Usuario actualizado correctamente']);
+            }else{
+                header('HTTP/1.1 500');
+                echo json_encode(['error' => 'no se pudo actualizar el usuario']);
             }
         }
 
-    } catch (\Throwable $th) {
-        //throw $th;
+    } catch (Exception $e) {
+        header('HTTP/1.1 500');
+        echo json_encode(['error' => 'error al actualizar el usuario']);
+    }
+}
+
+//DELETE /admin/id -> eliminar Usuario
+public function deleteUser($id){
+    try {
+        $usuario = UsuarioDAO::getById($id);
+
+        if (!$usuario) {
+            header('HTTP/1.1 404');
+            echo json_encode(['error' => 'usuario no encontrado']);
+        }else {
+            $exito = UsuarioDAO::delete($usuario->getId());
+
+            if ($exito) {
+                header('HTTP/1.1  200');
+                echo json_encode(['mensaje' => 'usuario eliminado correctamente']);
+            }else{
+                header('HTTP/1.1 500');
+                echo json_encode(['error' => 'no se pudo eliminar al usuario']);
+            }
+        }
+
+    } catch (Exception $e) {
+        header('HTTP/1.1');
+        echo json_encode(['error' => 'error al eliminar usuario'.$e->getMessage()]); 
     }
 }
 

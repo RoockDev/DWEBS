@@ -36,6 +36,28 @@ class PartidaDAO{
         return $partidas;
     }
 
+    public static function updatePartida($partida) {
+    try {
+        $conexion = Database::connect();
+        $query = "UPDATE partida SET tablero = ?, estado = ?, intentosTotales = ? WHERE id = ?";
+        $stmt = mysqli_prepare($conexion, $query);
+
+        
+        $tableroStr = $partida->getTableroAsString();
+        $estado = $partida->getEstado();
+        $intentos = $partida->getIntentosTotales();
+        $id = $partida->getId();
+
+        mysqli_stmt_bind_param($stmt, 'ssii', $tableroStr, $estado, $intentos, $id);
+        mysqli_stmt_execute($stmt);
+
+    } catch (Exception $e) {
+        throw new Exception("error al actualizar partida: " . $e->getMessage());
+    } finally {
+        $conexion->close();
+    }
+}
+
     public static function insertPartida($partida){
         try {
             $conexion = Database::connect();
@@ -63,7 +85,7 @@ class PartidaDAO{
         }
     }
 
-    public function getPartidaById($id)
+    public static function getPartidaById($id)
     {
         try {
             $conexion = Database::connect();
@@ -95,7 +117,7 @@ class PartidaDAO{
     }
 
 
-    public function deletePartida($partida){ 
+    public static function deletePartida($partida){ 
         try {
             $conexion = Database::connect();
             $query = "DELETE FROM partida WHERE id = ?";

@@ -4,16 +4,18 @@ class Usuario {
     private $id;
     private $dni;
     private $nombre;
+    private $email;
     private $clave;
     private $tfno;
     private $es_admin;
     private $partidas_jugadas;
     private $partidas_ganadas;
 
-    public function __construct($dni,$nombre,$clave,$tfno = null,$es_admin = false)
+    public function __construct($dni,$nombre,$email=null,$clave,$tfno = null,$es_admin = false)
     {
         $this->dni = $dni;
         $this->nombre = $nombre;
+        $this->email = $email;
         $this->clave = md5($clave);
         $this->tfno = $tfno;
         $this->es_admin = $es_admin;
@@ -146,6 +148,21 @@ class Usuario {
      */
     public function setPartidasGanadas($partidas_ganadas): self {
         $this->partidas_ganadas = $partidas_ganadas;
+        return $this;
+    }
+
+    /**
+     * Get the value of email
+     */
+    public function getEmail() {
+        return $this->email;
+    }
+
+    /**
+     * Set the value of email
+     */
+    public function setEmail($email): self {
+        $this->email = $email;
         return $this;
     }
 }
