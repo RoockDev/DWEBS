@@ -16,7 +16,7 @@ class Usuario {
         $this->dni = $dni;
         $this->nombre = $nombre;
         $this->email = $email;
-        $this->clave = md5($clave);
+        $this->clave = $clave;
         $this->tfno = $tfno;
         $this->es_admin = $es_admin;
         $this->partidas_jugadas = 0;

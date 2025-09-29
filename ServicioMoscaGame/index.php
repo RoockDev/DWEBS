@@ -1,20 +1,18 @@
 <?php
+// si no pongo dir no me reconoce las rutas de las carpetas
+require_once __DIR__ . '/Helper/parametros.php';
+require_once __DIR__ . '/DataBase/database.php';
+require_once __DIR__ . '/Models/usuario.php';
+require_once __DIR__ . '/Models/partida.php';
+require_once __DIR__ . '/DataBase/usuario_dao.php';
 
-require_once './Helper/parametros.php';
-require_once './DataBase/database.php';
-require_once './Models/usuario.php';
-require_once './Models/partida.php';
-require_once './DataBase/usuario_dao.php';
-require_once 'Controller/controller_usuarios.php';
-require_once 'Controller/controller_partidas.php';
+$metodo = $_SERVER["REQUEST_METHOD"];
+$ruta = $_SERVER["REQUEST_URI"];
 
-$metodo = $_SERVER['REQUEST_METTHOD'];
-$ruta = $_SERVER['REQUEST_URI'];
-
-$parametros = explode('/', $ruta);
+$parametros = explode("/", $ruta);
 unset($parametros[0]);
 
-if (!$empty($parametros[0])) {
+if(!empty($parametros[1])) {
     $datos = json_decode(file_get_contents('php://input'), true);
 
     if (isset($datos['username']) && isset($datos['clave'])) {
@@ -26,7 +24,7 @@ if (!$empty($parametros[0])) {
         if ($usuario) {
 
             //ahora segun la ruta llamamos al controlador correcto
-            $recurso = $parametros[0];
+            $recurso = $parametros[1];
             if ($recurso === 'admin') {
                 //verificamos que sea admin
                 if ($usuario->getEsAdmin()) {
@@ -72,7 +70,7 @@ if (!$empty($parametros[0])) {
             }
         } else {
             header('HTTP/1.1 401');
-            echo json_encode(['error' => 'credenciales invalidas']);
+            echo json_encode(['error' => 'credenciales invalidas']); // se me queda aqui simpre
         }
     } else {
         header('HTTP/1.1 401');

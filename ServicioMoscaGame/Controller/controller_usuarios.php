@@ -2,8 +2,8 @@
 
 //controlador solo para el admin
 
-require_once './DataBase/usuario_dao.php';
-require_once './Models/usuario.php';
+require_once __DIR__ . '/../DataBase/usuario_dao.php';
+require_once __DIR__ . '/../Models/usuario.php';
 
 class ControllerUsuarios
 {

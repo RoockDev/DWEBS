@@ -1,8 +1,7 @@
 <?php
-require_once('./config/mail.php');
-require_once('./DataBase/partidas_dao.php');
-require_once('./Models/partida.php');
-require_once('./Models/usuario.php');
+require_once __DIR__ . '/../DataBase/partidas_dao.php';
+require_once __DIR__ . '/../Models/partida.php';
+require_once __DIR__ . '/../Models/usuario.php';
 
 class controllerPartidas{
 

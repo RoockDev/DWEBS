@@ -1,7 +1,7 @@
 <?php
 
-require_once('./database.php');
-require_once('../Models/partida.php');
+require_once __DIR__ . '/database.php';
+require_once __DIR__ . '/../Models/partida.php';
 
 class PartidaDAO{
     public static function getAll(){

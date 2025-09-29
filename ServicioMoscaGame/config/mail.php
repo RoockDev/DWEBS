@@ -3,9 +3,9 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-require_once './phpmailer/phpmailer/src/Exception.php';
-require_once './phpmailer/phpmailer/src/PHPMailer.php';
-require_once './phpmailer/phpmailer/src/SMTP.php';
+require_once __DIR__ . '/../PHPMailer-master/src/Exception.php';
+require_once __DIR__ . '/../PHPMailer-master/src/PHPMailer.php';
+require_once __DIR__ . '/../PHPMailer-master/src/SMTP.php';
 
 function enviarCorreo($destinatario, $asunto, $mensaje) {
     $mail = new PHPMailer(true);
