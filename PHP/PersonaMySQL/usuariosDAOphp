@@ -1,0 +1,101 @@
+<?php
+
+require_once('./conexion.php');
+require_once('./parametros.php');
+require_once('./usuario.php');
+
+class UsuarioDAO
+{
+
+    private $conexion;
+
+    public function __construct()
+    {
+        $this->conexion = Conexion::getInstancia();
+    }
+
+    
+
+    public function getAllUsers()
+    {
+            $usuarios = [];
+        try {
+            $conexionMySql = $this->conexion->getConexion();
+            $query = Consultas::GETALL;
+            $stmt = mysqli_prepare($conexionMySql, $query);
+            mysqli_stmt_execute($stmt);
+            $resultado = mysqli_stmt_get_result($stmt);
+
+            
+
+            while ($fila = mysqli_fetch_assoc($resultado)) {
+                $usuario = new Usuario(
+                    $fila['dni'],
+                    $fila['nombre'],
+                    $fila['calve'],
+                    $fila['tfno']
+                );
+
+                $usuarios[] = $usuario;
+            }
+        } catch (Exception $e) {
+            throw new Exception("Error al obtener todos los usuarios: " . $e->getMessage());
+        } finally {
+            $this->conexion->closeConexion();
+        }
+
+        return $usuarios;
+    }
+
+    public function insertUser($usuario)
+    {
+        try {
+            $conexionMysql = $this->conexion->getConexion();
+            $query = Consultas::INSERT;
+            $stmt = mysqli_prepare($conexionMysql, $query);
+            $val1 = $usuario->getDni();
+            $val2 = $usuario->getNombre();
+            $val3 = $usuario->getClave();
+            $val4 = $usuario->getTfno();
+            mysqli_stmt_bind_param($stmt, 'ssis', $val1, $val2, $val3, $val4);
+            mysqli_stmt_execute($stmt);
+        } catch (Exception $e) {
+            throw new Exception("Error al insertar un usuario en la base de datos" . $e->getMessage());
+        } finally {
+            $this->conexion->closeConexion();
+        }
+    }
+
+    public function updateNameAndTfno($usuario)
+    { //preguntar a fernando mañana no se si esto va asi
+        try {
+            $conexionMysql = $this->conexion->getConexion();
+            $query = Consultas::UPDATEPATCH;
+            $stmt = mysqli_prepare($conexionMysql, $query);
+            $dni = $usuario->getDni();
+            $nombre = $usuario->getNombre();
+            $tfno = $usuario->getTfno();
+            mysqli_stmt_bind_param($stmt, "sss", $nombre, $tfno, $dni);
+            mysqli_stmt_affected_rows($stmt);
+        } catch (Exception $e) {
+            throw new Exception("Error al updatear usuario" . $e->getMessage());
+        }finally{
+            $this->conexion->closeConexion();
+        }
+    }
+
+    public function deleteUser($usuario){ //preguntar en clase dudas dudas
+        try {
+            $conexionMysql = $this->conexion->getConexion();
+            $query = Consultas::DELETE;
+            $stmt = mysqli_prepare($conexionMysql,$query);
+            $dni = $usuario->getDni();
+            mysqli_stmt_bind_param($stmt,"s",$dni);
+            mysqli_stmt_execute($stmt);
+        } catch (Exception $e) {
+            throw new Exception("Error al eliminar usuario".$e->getMessage());
+            
+        }
+
+    }
+}
